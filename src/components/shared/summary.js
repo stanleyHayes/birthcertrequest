@@ -29,7 +29,7 @@ const Summary = () => {
                                     <Typography
                                         gutterBottom={true}
                                         variant="h5">
-                                        Client Information
+                                        Client
                                     </Typography>
                                 </Grid>
                                 <Grid item={true}>
@@ -77,7 +77,7 @@ const Summary = () => {
                                         gutterBottom={true}
                                         variant="h5"
                                         align="center">
-                                        Payment Information
+                                        Payment
                                     </Typography>
                                 </Grid>
                                 <Grid item={true}>
@@ -133,7 +133,7 @@ const Summary = () => {
                                         gutterBottom={true}
                                         variant="h5"
                                         align="center">
-                                        Certificate Information
+                                        Certificate
                                     </Typography>
                                 </Grid>
                                 <Grid item={true}>

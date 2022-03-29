@@ -12,7 +12,10 @@ import {LocalizationProvider} from "@mui/lab";
 
 const theme = createTheme({
     typography: {
-        fontFamily: 'Chakra Petch, IBM Plex Mono, IBM Plex Sans, IBM Plex Serif, Inconsolata, Nunito, Quicksand, Raleway, Spartan'
+        // fontFamily: 'Raleway, Chakra Petch, IBM Plex Mono, IBM Plex Sans, IBM Plex Serif, Inconsolata, Nunito, Quicksand, Raleway, Spartan, ',
+        // fontFamily: 'Raleway',
+        fontFamily: 'Inconsolata'
+
     },
     palette: {
         primary: {
@@ -37,7 +40,7 @@ const theme = createTheme({
         mode: 'light'
     },
     shape: {
-        borderRadius: 8
+        borderRadius: 32
     }
 });
 

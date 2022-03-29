@@ -6,10 +6,10 @@ import {selectRequest} from "../../redux/request/request-reducer";
 import {useState} from "react";
 
 const Payment = () => {
-    const {page} = useSelector(selectRequest);
+    const {page, payment: p} = useSelector(selectRequest);
     const dispatch = useDispatch();
 
-    const [payment, setPayment] = useState({});
+    const [payment, setPayment] = useState({...p});
     const [error, setError] = useState({name: null, phone: null, reference: null, amount: null});
 
     const {name, phone, reference, amount} = payment;

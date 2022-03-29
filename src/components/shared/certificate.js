@@ -22,7 +22,7 @@ import {DatePicker} from "@mui/lab";
 
 const Certificate = () => {
 
-    const {page} = useSelector(selectRequest);
+    const {page, certificate: c} = useSelector(selectRequest);
     const dispatch = useDispatch();
 
     const [certificate, setCertificate] = useState({});
@@ -57,7 +57,6 @@ const Certificate = () => {
 
         dispatch(REQUEST_ACTION_CREATORS.nextPage());
     }
-
 
     return (
         <Box>

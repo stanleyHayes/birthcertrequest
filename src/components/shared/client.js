@@ -7,10 +7,10 @@ import {useState} from "react";
 
 const Client = () => {
 
-    const {page} = useSelector(selectRequest);
+    const {page, client: c} = useSelector(selectRequest);
     const dispatch = useDispatch();
 
-    const [client, setClient] = useState({});
+    const [client, setClient] = useState({...c});
     const [error, setError] = useState({name: null, phone: null, email: null});
 
     const {name, phone, email} = client;
