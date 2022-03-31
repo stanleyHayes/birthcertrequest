@@ -32,7 +32,7 @@ const saveCertificate = certificate => {
 }
 
 
-const previousPayment = payment => {
+const savePayment = payment => {
     return {
         type: REQUEST_ACTION_TYPES.SAVE_PAYMENT,
         payload: payment
@@ -82,6 +82,7 @@ const submitRequest = (request) => {
             });
             const {data, message} = response.data;
             dispatch(createRequestSuccess(data));
+            dispatch(REQUEST_ACTION_CREATORS.nextPage());
             console.log(message);
         }catch (e) {
             const {message} = e.response.data;
@@ -96,7 +97,7 @@ export const REQUEST_ACTION_CREATORS = {
     previousPage,
     gotoPage,
     saveCertificate,
-    previousPayment,
+    savePayment,
     saveClient,
     submitRequest
 };

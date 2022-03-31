@@ -4,22 +4,59 @@ import {REQUEST_ACTION_CREATORS} from "../../redux/request/request-action-creato
 import {useDispatch, useSelector} from "react-redux";
 import {selectRequest} from "../../redux/request/request-reducer";
 import {useState} from "react";
+import validator from "validator";
 
 const Payment = () => {
     const {page, payment: p} = useSelector(selectRequest);
     const dispatch = useDispatch();
 
     const [payment, setPayment] = useState({...p});
-    const [error, setError] = useState({name: null, phone: null, reference: null, amount: null});
+    const [error, setError] = useState({});
 
-    const {name, phone, reference, amount} = payment;
+    const {name, phone, transactionID, amount} = payment;
 
     const handleChange = event => {
         setPayment({...payment, [event.target.name]: event.target.value});
     }
     const handleButtonClick = () => {
 
+        if(!name){
+            setError({error, name: 'Field required'});
+            return;
+        }else {
+            setError({error, name: null});
+        }
 
+        if(!phone){
+            setError({error, phone: 'Field required'});
+            return;
+        }else {
+            setError({error, phone: null});
+        }
+
+        if(!validator.isMobilePhone(phone)){
+            setError({error, phone: 'Invalid phone'});
+            return;
+        }else {
+            setError({error, phone: null});
+        }
+
+
+        if(!transactionID){
+            setError({error, transactionID: 'Field required'});
+            return;
+        }else {
+            setError({error, transactionID: null});
+        }
+
+        if(!amount || Number(amount) < 0){
+            setError({error, amount: 'Invalid amount'});
+            return;
+        }else {
+            setError({error, amount: null});
+        }
+
+        dispatch(REQUEST_ACTION_CREATORS.savePayment({name, phone, transactionID, amount}));
         dispatch(REQUEST_ACTION_CREATORS.nextPage());
     }
 
@@ -27,7 +64,10 @@ const Payment = () => {
         <Box>
             <Card elevation={1} variant="elevation">
                 <CardContent>
-                    <Typography variant="h4" align="center">Payment</Typography>
+                    <Typography gutterBottom={true} variant="h4" align="center">Payment</Typography>
+                    <Typography gutterBottom={true} variant="body2" align="center">
+                        This information should be about your payment
+                    </Typography>
 
                     <Stack direction="column" spacing={2}>
                         <Box>
@@ -41,6 +81,7 @@ const Payment = () => {
                                 helperText={error.name}
                                 variant="outlined"
                                 name="name"
+                                defaultValue=""
                                 onChange={handleChange}
                                 value={name}
                                 placeholder="Enter name"
@@ -57,6 +98,7 @@ const Payment = () => {
                                 helperText={error.phone}
                                 variant="outlined"
                                 name="phone"
+                                defaultValue=""
                                 onChange={handleChange}
                                 value={phone}
                                 placeholder="Enter phone number"
@@ -73,6 +115,7 @@ const Payment = () => {
                                 helperText={error.amount}
                                 variant="outlined"
                                 name="amount"
+                                defaultValue=""
                                 onChange={handleChange}
                                 value={amount}
                                 type="number"
@@ -83,17 +126,17 @@ const Payment = () => {
                         <Box>
                             <TextField
                                 fullWidth={true}
-                                label="Reference Code"
+                                label="Transaction ID"
                                 required={true}
                                 size="medium"
-                                error={Boolean(error.reference)}
-                                helperText={error.reference}
+                                error={Boolean(error.transactionID)}
+                                helperText={error.transactionID}
                                 variant="outlined"
-                                name="email"
+                                name="transactionID"
+                                defaultValue=""
                                 onChange={handleChange}
-                                value={reference}
-                                type="reference"
-                                placeholder="Enter reference code"
+                                value={transactionID}
+                                placeholder="Enter transaction id"
                             />
                         </Box>
                     </Stack>

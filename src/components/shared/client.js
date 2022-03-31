@@ -4,6 +4,7 @@ import {REQUEST_ACTION_CREATORS} from "../../redux/request/request-action-creato
 import {useDispatch, useSelector} from "react-redux";
 import {selectRequest} from "../../redux/request/request-reducer";
 import {useState} from "react";
+import validator from "validator";
 
 const Client = () => {
 
@@ -11,7 +12,7 @@ const Client = () => {
     const dispatch = useDispatch();
 
     const [client, setClient] = useState({...c});
-    const [error, setError] = useState({name: null, phone: null, email: null});
+    const [error, setError] = useState({});
 
     const {name, phone, email} = client;
 
@@ -19,8 +20,43 @@ const Client = () => {
         setClient({...client, [event.target.name]: event.target.value});
     }
     const handleButtonClick = () => {
+        if(!name){
+            setError({error, name: 'Field required'});
+            return;
+        }else {
+            setError({error, name: null});
+        }
+
+        if(!email){
+            setError({error, email: 'Field required'});
+            return;
+        }else {
+            setError({error, email: null});
+        }
+
+        if(!validator.isEmail(email)){
+            setError({error, email: 'Invalid email'});
+            return;
+        }else {
+            setError({error, email: null});
+        }
 
 
+        if(!phone){
+            setError({error, phone: 'Field required'});
+            return;
+        }else {
+            setError({error, phone: null});
+        }
+
+        if(!validator.isMobilePhone(phone)){
+            setError({error, phone: 'Invalid phone'});
+            return;
+        }else {
+            setError({error, phone: null});
+        }
+
+        dispatch(REQUEST_ACTION_CREATORS.saveClient({email, name, phone}));
         dispatch(REQUEST_ACTION_CREATORS.nextPage());
     }
 
@@ -29,6 +65,9 @@ const Client = () => {
             <Card elevation={1} variant="elevation">
                 <CardContent>
                     <Typography gutterBottom={true} variant="h4" align="center">Client</Typography>
+                    <Typography gutterBottom={true} variant="body2" align="center">
+                        This information will be used to contact you.
+                    </Typography>
 
                     <Stack direction="column" spacing={2}>
                         <Box>
@@ -41,6 +80,7 @@ const Client = () => {
                                 margin="dense"
                                 helperText={error.name}
                                 variant="outlined"
+                                defaultValue=""
                                 name="name"
                                 onChange={handleChange}
                                 value={name}
@@ -58,13 +98,13 @@ const Client = () => {
                                 helperText={error.email}
                                 variant="outlined"
                                 name="email"
+                                defaultValue=""
                                 onChange={handleChange}
                                 value={email}
                                 type="email"
                                 placeholder="Enter email"
                             />
                         </Box>
-
 
                         <Box>
                             <TextField
@@ -75,6 +115,7 @@ const Client = () => {
                                 error={Boolean(error.phone)}
                                 helperText={error.phone}
                                 variant="outlined"
+                                defaultValue=""
                                 name="phone"
                                 onChange={handleChange}
                                 value={phone}

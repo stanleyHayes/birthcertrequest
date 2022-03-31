@@ -1,39 +1,11 @@
 import {REQUEST_ACTION_TYPES} from "./request-action-types";
 
 const INITIAL_STATE = {
-    client: {
-        name: 'Stanley Hayford',
-        phone: '+233270048319',
-        email: 'dev.stanley.hayford@gmail.com'
-    },
+    client: {},
     loading: false,
     error: null,
-    certificate: {
-        firstName: 'Persius',
-        middleName: '',
-        lastName: 'Setepenre',
-        dateOfBirth: '29/8/1993',
-        sex: 'Male',
-        placeOfBirth: 'Baiden Gartey',
-        motherMaidenName: 'Nancy Arthur',
-        ageOfMother: 58,
-        motherLevelOfEducation: 'Bachelor',
-        motherOccupation: 'Teaching',
-        motherNationality: 'Ghanaian',
-        nameOfFather: 'Edwin Hayford',
-        ageOfFather: 60,
-        fatherLevelOfEducation: 'Bachelor',
-        telephoneNumber: '+233270048319',
-        houseNumber: 'F96B/3',
-        religion: 'Alkebulan',
-        fullNameOfInformant: "Usermatere Setepenre"
-    },
-    payment: {
-        reference: 'ARETRT56564',
-        amount: 200,
-        name: 'Stanley Asoku Hayford',
-        phone: '+233555180048'
-    },
+    certificate: {},
+    payment: {},
     page: 0
 };
 
@@ -79,7 +51,7 @@ const requestReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 loading: true,
-                error: null
+                error: null,
             }
 
         case REQUEST_ACTION_TYPES.CREATE_REQUEST_SUCCESS:
@@ -93,7 +65,10 @@ const requestReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                error: action.payload,
+                certificate: {},
+                client: {},
+                payment: {}
             }
         default:
             return state;

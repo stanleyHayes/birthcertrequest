@@ -19,30 +19,33 @@ import {ChevronLeft, ChevronRight} from "@mui/icons-material";
 import {REQUEST_ACTION_CREATORS} from "../../redux/request/request-action-creators";
 import {useState} from "react";
 import {DatePicker} from "@mui/lab";
+import moment from "moment";
+import validator from "validator";
 
 const Certificate = () => {
 
     const {page, certificate: c} = useSelector(selectRequest);
     const dispatch = useDispatch();
 
-    const [certificate, setCertificate] = useState({});
-    const [error, setError] = useState({name: null, phone: null, reference: null, amount: null});
+    const [certificate, setCertificate] = useState({...c});
+    const [sex, setSex] = useState(c.sex);
+    const [motherLevelOfEducation, setMotherLevelOfEducation] = useState(c.motherLevelOfEducation);
+    const [fatherLevelOfEducation, setFatherLevelOfEducation] = useState(c.fatherLevelOfEducation);
+
+    const [error, setError] = useState({});
 
     const {
         firstName,
         middleName,
         lastName,
         dateOfBirth,
-        sex,
         placeOfBirth,
         motherMaidenName,
         ageOfMother,
-        motherLevelOfEducation,
         motherOccupation,
         motherNationality,
         nameOfFather,
         ageOfFather,
-        fatherLevelOfEducation,
         telephoneNumber,
         houseNumber,
         religion,
@@ -54,7 +57,143 @@ const Certificate = () => {
     }
     const handleButtonClick = () => {
 
+        if(!firstName){
+            setError({error, firstName: 'Field required'});
+            return;
+        }else {
+            setError({error, firstName: null});
+        }
 
+        if(!lastName){
+            setError({error, lastName: 'Field required'});
+            return;
+        }else {
+            setError({error, lastName: null});
+        }
+
+        if(!dateOfBirth || moment(dateOfBirth).isAfter(Date.now())){
+            setError({error, dateOfBirth: 'Invalid date'});
+            return;
+        }else {
+            setError({error, dateOfBirth: null});
+        }
+
+        if(!sex){
+            setError({error, sex: 'Field required'});
+            return;
+        }else {
+            setError({error, sex: null});
+        }
+
+        if(!placeOfBirth){
+            setError({error, placeOfBirth: 'Field required'});
+            return;
+        }else {
+            setError({error, placeOfBirth: null});
+        }
+
+        if(!motherMaidenName){
+            setError({error, motherMaidenName: 'Field required'});
+            return;
+        }else {
+            setError({error, motherMaidenName: null});
+        }
+
+        if(!ageOfMother || Number(ageOfMother) < 0){
+            setError({error, ageOfMother: 'Invalid age'});
+            return;
+        }else {
+            setError({error, ageOfMother: null});
+        }
+
+        if(!motherLevelOfEducation){
+            setError({error, motherLevelOfEducation: 'Field required'});
+            return;
+        }else {
+            setError({error, motherLevelOfEducation: null});
+        }
+
+        if(!motherOccupation){
+            setError({error, motherOccupation: 'Field required'});
+            return;
+        }else {
+            setError({error, motherOccupation: null});
+        }
+
+        if(!motherNationality){
+            setError({error, motherNationality: 'Field required'});
+            return;
+        }else {
+            setError({error, motherNationality: null});
+        }
+
+        if(!nameOfFather){
+            setError({error, nameOfFather: 'Field required'});
+            return;
+        }else {
+            setError({error, nameOfFather: null});
+        }
+
+        if(!ageOfFather){
+            setError({error, ageOfFather: 'Field required'});
+            return;
+        }else {
+            setError({error, ageOfFather: null});
+        }
+
+        if(!fatherLevelOfEducation){
+            setError({error, fatherLevelOfEducation: 'Field required'});
+            return;
+        }else {
+            setError({error, fatherLevelOfEducation: null});
+        }
+
+        if(!telephoneNumber || !validator.isMobilePhone(telephoneNumber)){
+            setError({error, telephoneNumber: 'Invalid phone'});
+            return;
+        }else {
+            setError({error, telephoneNumber: null});
+        }
+        if(!houseNumber){
+            setError({error, houseNumber: 'Field required'});
+            return;
+        }else {
+            setError({error, houseNumber: null});
+        }
+
+        if(!religion){
+            setError({error, religion: 'Field required'});
+            return;
+        }else {
+            setError({error, religion: null});
+        }
+        if(!fullNameOfInformant){
+            setError({error, fullNameOfInformant: 'Field required'});
+            return;
+        }else {
+            setError({error, fullNameOfInformant: null});
+        }
+
+        dispatch(REQUEST_ACTION_CREATORS.saveCertificate({
+            firstName,
+            middleName,
+            lastName,
+            dateOfBirth,
+            sex,
+            placeOfBirth,
+            motherMaidenName,
+            ageOfMother,
+            motherLevelOfEducation,
+            motherOccupation,
+            motherNationality,
+            nameOfFather,
+            ageOfFather,
+            fatherLevelOfEducation,
+            telephoneNumber,
+            houseNumber,
+            religion,
+            fullNameOfInformant
+        }));
         dispatch(REQUEST_ACTION_CREATORS.nextPage());
     }
 
@@ -83,6 +222,7 @@ const Certificate = () => {
                                         helperText={error.firstName}
                                         variant="outlined"
                                         name="firstName"
+                                        defaultValue=""
                                         onChange={handleChange}
                                         value={firstName}
                                         placeholder="Enter your first name"
@@ -98,6 +238,7 @@ const Certificate = () => {
                                         helperText={error.middleName}
                                         variant="outlined"
                                         name="middleName"
+                                        defaultValue=""
                                         onChange={handleChange}
                                         value={middleName}
                                         placeholder="Enter middle name"
@@ -114,6 +255,7 @@ const Certificate = () => {
                                         helperText={error.lastName}
                                         variant="outlined"
                                         name="lastName"
+                                        defaultValue=""
                                         onChange={handleChange}
                                         value={lastName}
                                     />
@@ -129,13 +271,14 @@ const Certificate = () => {
                                         helperText={error.placeOfBirth}
                                         variant="outlined"
                                         name="placeOfBirth"
+                                        defaultValue=""
                                         onChange={handleChange}
                                         value={placeOfBirth}
                                     />
                                 </Box>
 
                                 <FormControl>
-                                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                    <InputLabel>Sex</InputLabel>
                                     <Select
                                         fullWidth={true}
                                         label="Sex"
@@ -145,10 +288,9 @@ const Certificate = () => {
                                         helperText={error.sex}
                                         variant="outlined"
                                         name="sex"
-                                        onChange={handleChange}
-                                        value={sex}
-                                        type="text"
-                                        placeholder="Sex">
+                                        defaultValue=""
+                                        onChange={event => setSex(event.target.value)}
+                                        value={sex}>
                                         <MenuItem value="Male">Male</MenuItem>
                                         <MenuItem value="Female">Female</MenuItem>
                                     </Select>
@@ -184,6 +326,7 @@ const Certificate = () => {
                                         helperText={error.religion}
                                         variant="outlined"
                                         name="religion"
+                                        defaultValue=""
                                         onChange={handleChange}
                                         value={religion}
                                     />
@@ -200,6 +343,7 @@ const Certificate = () => {
                                         variant="outlined"
                                         name="telephoneNumber"
                                         onChange={handleChange}
+                                        defaultValue=""
                                         placeholder="Enter phone number"
                                         value={telephoneNumber}
                                     />
@@ -216,6 +360,7 @@ const Certificate = () => {
                                         helperText={error.houseNumber}
                                         variant="outlined"
                                         name="houseNumber"
+                                        defaultValue=""
                                         onChange={handleChange}
                                         value={houseNumber}
                                     />
@@ -232,6 +377,7 @@ const Certificate = () => {
                                         variant="outlined"
                                         name="fullNameOfInformant"
                                         onChange={handleChange}
+                                        defaultValue=""
                                         placeholder="Enter informant full name"
                                         value={fullNameOfInformant}
                                     />
@@ -255,6 +401,7 @@ const Certificate = () => {
                                         variant="outlined"
                                         name="motherMaidenName"
                                         onChange={handleChange}
+                                        defaultValue=""
                                         value={motherMaidenName}
                                         placeholder="Enter your mother's maiden name"
                                     />
@@ -270,6 +417,7 @@ const Certificate = () => {
                                         helperText={error.ageOfMother}
                                         variant="outlined"
                                         name="ageOfMother"
+                                        defaultValue=""
                                         onChange={handleChange}
                                         value={ageOfMother}
                                         placeholder="Enter age of mother"
@@ -288,7 +436,8 @@ const Certificate = () => {
                                         helperText={error.motherLevelOfEducation}
                                         variant="outlined"
                                         name="motherLevelOfEducation"
-                                        onChange={handleChange}
+                                        onChange={event => setMotherLevelOfEducation(event.target.value)}
+                                        defaultValue=""
                                         value={motherLevelOfEducation}>
                                         <MenuItem value="High School">High School</MenuItem>
                                         <MenuItem value="Bachelor">Bachelor</MenuItem>
@@ -304,6 +453,7 @@ const Certificate = () => {
                                         error={Boolean(error.motherOccupation)}
                                         helperText={error.motherOccupation}
                                         variant="outlined"
+                                        defaultValue=""
                                         name="motherOccupation"
                                         onChange={handleChange}
                                         value={motherOccupation}
@@ -320,14 +470,13 @@ const Certificate = () => {
                                         helperText={error.motherNationality}
                                         variant="outlined"
                                         name="motherNationality"
+                                        defaultValue=""
                                         onChange={handleChange}
                                         value={motherNationality}
                                         type="text"
                                         placeholder="Enter nationality"
                                     />
                                 </Box>
-
-
                             </Stack>
                         </Box>
 
@@ -347,6 +496,7 @@ const Certificate = () => {
                                         variant="outlined"
                                         name="nameOfFather"
                                         onChange={handleChange}
+                                        defaultValue=""
                                         value={nameOfFather}
                                         placeholder="Enter your father's name"
                                     />
@@ -363,6 +513,7 @@ const Certificate = () => {
                                         variant="outlined"
                                         name="ageOfFather"
                                         onChange={handleChange}
+                                        defaultValue=""
                                         value={ageOfFather}
                                         placeholder="Enter age of father"
                                     />
@@ -379,45 +530,14 @@ const Certificate = () => {
                                         error={Boolean(error.fatherLevelOfEducation)}
                                         helperText={error.fatherLevelOfEducation}
                                         variant="outlined"
+                                        defaultValue=""
                                         name="fatherLevelOfEducation"
-                                        onChange={handleChange}
+                                        onChange={event => setFatherLevelOfEducation(event.target.value)}
                                         value={fatherLevelOfEducation}>
                                         <MenuItem value="High School">High School</MenuItem>
                                         <MenuItem value="Bachelor">Bachelor</MenuItem>
                                     </Select>
                                 </FormControl>
-
-                                <Box>
-                                    <TextField
-                                        fullWidth={true}
-                                        label="Occupation"
-                                        required={true}
-                                        size="medium"
-                                        error={Boolean(error.motherOccupation)}
-                                        helperText={error.motherOccupation}
-                                        variant="outlined"
-                                        name="motherOccupation"
-                                        onChange={handleChange}
-                                        value={motherOccupation}
-                                    />
-                                </Box>
-
-                                <Box>
-                                    <TextField
-                                        fullWidth={true}
-                                        label="Nationality"
-                                        required={true}
-                                        size="medium"
-                                        error={Boolean(error.motherNationality)}
-                                        helperText={error.motherNationality}
-                                        variant="outlined"
-                                        name="motherNationality"
-                                        onChange={handleChange}
-                                        value={motherNationality}
-                                        type="text"
-                                        placeholder="Enter nationality"
-                                    />
-                                </Box>
                             </Stack>
                         </Box>
                     </Stack>

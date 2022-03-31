@@ -1,19 +1,54 @@
-import {Box, Button, Card, CardContent, Divider, Grid, Stack, Typography} from "@mui/material";
-import {CheckCircle, ChevronLeft, ChevronRight} from "@mui/icons-material";
+import {Box, Button, Card, CardContent, Divider, Grid, LinearProgress, Stack, Typography} from "@mui/material";
+import {CheckCircle, ChevronLeft} from "@mui/icons-material";
 import {REQUEST_ACTION_CREATORS} from "../../redux/request/request-action-creators";
 import {useDispatch, useSelector} from "react-redux";
 import {selectRequest} from "../../redux/request/request-reducer";
+import {PAYMENT_ACTION_CREATORS} from "../../redux/payment/payment-action-creators";
 
 const Summary = () => {
 
     const {page} = useSelector(selectRequest);
     const dispatch = useDispatch();
 
-    const {client, certificate, payment} = useSelector(selectRequest);
+    const {client, certificate, payment, loading} = useSelector(selectRequest);
+
+    const handleSubmit = () => {
+        dispatch(PAYMENT_ACTION_CREATORS.submitPayment({
+            transaction_id: payment.transactionID,
+            phone: payment.phone,
+            amount: payment.amount,
+            name: payment.name
+        }));
+
+        dispatch(REQUEST_ACTION_CREATORS.submitRequest({
+            first_name: certificate.firstName,
+            middle_name: certificate.middleName,
+            last_name: certificate.lastName,
+            date_of_birth: certificate.dateOfBirth,
+            sex: certificate.sex,
+            place_of_birth: certificate.placeOfBirth,
+            mother_maiden_name: certificate.motherMaidenName,
+            age_of_mother: certificate.ageOfMother,
+            mother_level_of_education: certificate.motherLevelOfEducation,
+            mother_occupation: certificate.motherOccupation,
+            mother_nationality: certificate.motherNationality,
+            name_of_father: certificate.nameOfFather,
+            age_of_father: certificate.ageOfFather,
+            father_level_of_education: certificate.fatherLevelOfEducation,
+            telephone_number: certificate.telephoneNumber,
+            house_number: certificate.houseNumber,
+            religion: certificate.religion,
+            full_name_of_informant: certificate.fullNameOfInformant,
+            contact_name: client.name,
+            contact_email: client.email,
+            contact_phone: client.phone
+        }));
+    }
 
     return (
         <Box>
             <Card elevation={1} variant="elevation">
+                {loading && <LinearProgress variant="query" color="primary"/>}
                 <CardContent>
                     <Typography variant="h4" align="center">Summary</Typography>
 
@@ -100,10 +135,10 @@ const Summary = () => {
 
                             <Box mb={2}>
                                 <Typography gutterBottom={true} variant="body2">
-                                    Reference
+                                    Transaction ID
                                 </Typography>
                                 <Typography gutterBottom={true} variant="h6">
-                                    {payment.reference}
+                                    {payment.transactionID}
                                 </Typography>
                             </Box>
 
@@ -177,7 +212,7 @@ const Summary = () => {
                                     Date of Birth
                                 </Typography>
                                 <Typography gutterBottom={true} variant="h6">
-                                    {certificate.dateOfBirth}
+                                    {new Date(certificate.dateOfBirth).toDateString()}
                                 </Typography>
                             </Box>
 
@@ -313,7 +348,6 @@ const Summary = () => {
                                 </Typography>
                             </Box>
                         </Box>
-
                     </Stack>
 
                     <Divider sx={{my: 2}} variant="fullWidth" light={true}/>
@@ -334,13 +368,13 @@ const Summary = () => {
 
                         <Grid item={true} xs={12} md="auto">
                             <Button
-                                onClick={() => dispatch(REQUEST_ACTION_CREATORS.nextPage())}
+                                onClick={handleSubmit}
                                 size="medium"
                                 variant="contained"
                                 disableElevation={true}
                                 fullWidth={true}
                                 endIcon={<CheckCircle/>}
-                                disabled={page === 6}>
+                                disabled={loading}>
                                 Submit
                             </Button>
                         </Grid>
