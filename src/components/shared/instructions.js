@@ -20,6 +20,7 @@ const Instructions = () => {
                     <Grid container={true} justifyContent="space-between" spacing={2}>
                         <Grid item={true} xs={12} md="auto">
                             <Button
+                                onClick={() => dispatch(REQUEST_ACTION_CREATORS.previousPage())}
                                 variant="outlined"
                                 startIcon={<ChevronLeft/>}
                                 fullWidth={true}
