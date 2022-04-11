@@ -7,7 +7,10 @@ const Layout = ({children}) => {
                 minHeight: '100vh',
                 backgroundColor: 'background.default',
                 display: 'flex',
-                alignItems: "center"
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingBottom: 4,
+                paddingTop: 4
             }}>
             {children}
         </Box>

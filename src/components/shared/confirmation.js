@@ -1,15 +1,14 @@
 import {Avatar, Box, Button, Card, CardContent, Divider, Grid, Typography} from "@mui/material";
 import {REQUEST_ACTION_CREATORS} from "../../redux/request/request-action-creators";
-import {useDispatch, useSelector} from "react-redux";
-import {selectRequest} from "../../redux/request/request-reducer";
+import {useDispatch} from "react-redux";
+import Layout from "../layout/layout";
 
 const Confirmation = () => {
 
-    const {page} = useSelector(selectRequest);
     const dispatch = useDispatch();
 
     return (
-        <Box>
+        <Layout>
             <Card elevation={1} variant="elevation">
                 <CardContent>
                     <Typography variant="h4" align="center">Confirmation</Typography>
@@ -46,7 +45,7 @@ const Confirmation = () => {
                     </Grid>
                 </CardContent>
             </Card>
-        </Box>
+        </Layout>
     )
 }
 

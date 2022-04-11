@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectRequest} from "../../redux/request/request-reducer";
 import {useState} from "react";
 import validator from "validator";
+import Layout from "../layout/layout";
 
 const Client = () => {
 
@@ -61,7 +62,7 @@ const Client = () => {
     }
 
     return (
-        <Box>
+        <Layout>
             <Card elevation={1} variant="elevation">
                 <CardContent>
                     <Typography gutterBottom={true} variant="h4" align="center">Client</Typography>
@@ -156,7 +157,7 @@ const Client = () => {
                     </Grid>
                 </CardContent>
             </Card>
-        </Box>
+        </Layout>
     )
 }
 

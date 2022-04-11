@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectRequest} from "../../redux/request/request-reducer";
 import {useState} from "react";
 import validator from "validator";
+import Layout from "../layout/layout";
 
 const Payment = () => {
     const {page, payment: p} = useSelector(selectRequest);
@@ -61,7 +62,7 @@ const Payment = () => {
     }
 
     return (
-        <Box>
+        <Layout>
             <Card elevation={1} variant="elevation">
                 <CardContent>
                     <Typography gutterBottom={true} variant="h4" align="center">Payment</Typography>
@@ -172,7 +173,7 @@ const Payment = () => {
                     </Grid>
                 </CardContent>
             </Card>
-        </Box>
+        </Layout>
     )
 }
 

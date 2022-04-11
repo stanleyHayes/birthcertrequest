@@ -4,6 +4,7 @@ import {REQUEST_ACTION_CREATORS} from "../../redux/request/request-action-creato
 import {useDispatch, useSelector} from "react-redux";
 import {selectRequest} from "../../redux/request/request-reducer";
 import {PAYMENT_ACTION_CREATORS} from "../../redux/payment/payment-action-creators";
+import Layout from "../layout/layout";
 
 const Summary = () => {
 
@@ -46,7 +47,7 @@ const Summary = () => {
     }
 
     return (
-        <Box>
+        <Layout>
             <Card elevation={1} variant="elevation">
                 {loading && <LinearProgress variant="query" color="primary"/>}
                 <CardContent>
@@ -381,7 +382,7 @@ const Summary = () => {
                     </Grid>
                 </CardContent>
             </Card>
-        </Box>
+        </Layout>
     )
 }
 
