@@ -453,8 +453,9 @@ const Certificate = () => {
                                             onChange={event => setMotherLevelOfEducation(event.target.value)}
                                             defaultValue=""
                                             value={motherLevelOfEducation}>
+                                            <MenuItem value="Basic">Basic</MenuItem>
                                             <MenuItem value="High School">High School</MenuItem>
-                                            <MenuItem value="Bachelor">Bachelor</MenuItem>
+                                            <MenuItem value="Bachelor">University / College</MenuItem>
                                         </Select>
                                     </FormControl>
 
@@ -552,8 +553,9 @@ const Certificate = () => {
                                             name="fatherLevelOfEducation"
                                             onChange={event => setFatherLevelOfEducation(event.target.value)}
                                             value={fatherLevelOfEducation}>
+                                            <MenuItem value="Basic">Basic</MenuItem>
                                             <MenuItem value="High School">High School</MenuItem>
-                                            <MenuItem value="Bachelor">Bachelor</MenuItem>
+                                            <MenuItem value="Bachelor">University / College</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Stack>
