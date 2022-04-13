@@ -80,7 +80,7 @@ const submitRequest = (request) => {
                 url: `${CONSTANTS.SERVER_BASE_URL}/requests`,
                 data: request
             });
-            const {data, message} = response.data;
+            const {data} = response.data;
             dispatch(createRequestSuccess(data));
             dispatch(REQUEST_ACTION_CREATORS.nextPage());
         }catch (e) {
