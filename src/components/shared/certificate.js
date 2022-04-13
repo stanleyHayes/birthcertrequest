@@ -32,6 +32,7 @@ const Certificate = () => {
     const [sex, setSex] = useState(c.sex);
     const [motherLevelOfEducation, setMotherLevelOfEducation] = useState(c.motherLevelOfEducation);
     const [fatherLevelOfEducation, setFatherLevelOfEducation] = useState(c.fatherLevelOfEducation);
+    const [idCardType, setIDCardType] = useState(c.idCardType);
 
     const [error, setError] = useState({});
 
@@ -47,10 +48,13 @@ const Certificate = () => {
         motherNationality,
         nameOfFather,
         ageOfFather,
+        fatherOccupation,
+        fatherNationality,
         telephoneNumber,
         houseNumber,
         religion,
-        fullNameOfInformant
+        fullNameOfInformant,
+        idCardNumber,
     } = certificate;
 
     const handleChange = event => {
@@ -149,6 +153,20 @@ const Certificate = () => {
             setError({error, fatherLevelOfEducation: null});
         }
 
+        if (!fatherOccupation) {
+            setError({error, fatherOccupation: 'Field required'});
+            return;
+        } else {
+            setError({error, fatherOccupation: null});
+        }
+
+        if (!fatherNationality) {
+            setError({error, fatherNationality: 'Field required'});
+            return;
+        } else {
+            setError({error, fatherNationality: null});
+        }
+
         if (!telephoneNumber || !validator.isMobilePhone(telephoneNumber)) {
             setError({error, telephoneNumber: 'Invalid phone'});
             return;
@@ -175,6 +193,19 @@ const Certificate = () => {
             setError({error, fullNameOfInformant: null});
         }
 
+        if (!idCardType) {
+            setError({error, idCardType: 'Field required'});
+            return;
+        } else {
+            setError({error, idCardType: null});
+        }
+        if (!idCardNumber) {
+            setError({error, idCardNumber: 'Field required'});
+            return;
+        } else {
+            setError({error, idCardNumber: null});
+        }
+
         dispatch(REQUEST_ACTION_CREATORS.saveCertificate({
             firstName,
             middleName,
@@ -193,7 +224,11 @@ const Certificate = () => {
             telephoneNumber,
             houseNumber,
             religion,
-            fullNameOfInformant
+            fullNameOfInformant,
+            idCardNumber,
+            idCardType,
+            fatherOccupation,
+            fatherNationality,
         }));
         dispatch(REQUEST_ACTION_CREATORS.nextPage());
     }
@@ -214,7 +249,7 @@ const Certificate = () => {
                 <Divider sx={{my: 2}} variant="fullWidth" light={true}/>
 
                 <Grid container={true} mb={4} spacing={4}>
-                    <Grid item={true} xs={12} md={4}>
+                    <Grid item={true} xs={12} md={6}>
                         <Card elevation={1} variant="elevation">
                             <CardContent>
                                 <Typography variant="h6" align="center">Personal Information</Typography>
@@ -231,7 +266,6 @@ const Certificate = () => {
                                             helperText={error.firstName}
                                             variant="outlined"
                                             name="firstName"
-                                            defaultValue=""
                                             onChange={handleChange}
                                             value={firstName}
                                             placeholder="Enter your first name"
@@ -247,7 +281,6 @@ const Certificate = () => {
                                             helperText={error.middleName}
                                             variant="outlined"
                                             name="middleName"
-                                            defaultValue=""
                                             onChange={handleChange}
                                             value={middleName}
                                             placeholder="Enter middle name"
@@ -264,7 +297,6 @@ const Certificate = () => {
                                             helperText={error.lastName}
                                             variant="outlined"
                                             name="lastName"
-                                            defaultValue=""
                                             onChange={handleChange}
                                             value={lastName}
                                         />
@@ -280,7 +312,6 @@ const Certificate = () => {
                                             helperText={error.placeOfBirth}
                                             variant="outlined"
                                             name="placeOfBirth"
-                                            defaultValue=""
                                             onChange={handleChange}
                                             value={placeOfBirth}
                                         />
@@ -297,7 +328,6 @@ const Certificate = () => {
                                             helperText={error.sex}
                                             variant="outlined"
                                             name="sex"
-                                            defaultValue=""
                                             onChange={event => setSex(event.target.value)}
                                             value={sex}>
                                             <MenuItem value="Male">Male</MenuItem>
@@ -324,6 +354,17 @@ const Certificate = () => {
                                             date={dateOfBirth}
                                         />
                                     </Box>
+                                </Stack>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+
+                    <Grid item={true} xs={12} md={6}>
+                        <Card elevation={1} variant="elevation">
+                            <CardContent>
+                                <Typography variant="h6" align="center">Other Information</Typography>
+
+                                <Stack direction="column" spacing={2.9}>
 
                                     <Box>
                                         <TextField
@@ -335,7 +376,6 @@ const Certificate = () => {
                                             helperText={error.religion}
                                             variant="outlined"
                                             name="religion"
-                                            defaultValue=""
                                             onChange={handleChange}
                                             value={religion}
                                         />
@@ -352,7 +392,6 @@ const Certificate = () => {
                                             variant="outlined"
                                             name="telephoneNumber"
                                             onChange={handleChange}
-                                            defaultValue=""
                                             placeholder="Enter phone number"
                                             value={telephoneNumber}
                                         />
@@ -369,7 +408,6 @@ const Certificate = () => {
                                             helperText={error.houseNumber}
                                             variant="outlined"
                                             name="houseNumber"
-                                            defaultValue=""
                                             onChange={handleChange}
                                             value={houseNumber}
                                         />
@@ -386,21 +424,56 @@ const Certificate = () => {
                                             variant="outlined"
                                             name="fullNameOfInformant"
                                             onChange={handleChange}
-                                            defaultValue=""
                                             placeholder="Enter informant full name"
                                             value={fullNameOfInformant}
                                         />
                                     </Box>
+
+                                    <FormControl>
+                                        <InputLabel>ID Card Type</InputLabel>
+                                        <Select
+                                            mb={1}
+                                            select={true}
+                                            fullWidth={true}
+                                            label="ID Card Type"
+                                            required={true}
+                                            size="medium"
+                                            error={Boolean(error.idCardType)}
+                                            helperText={error.idCardType}
+                                            variant="outlined"
+                                            name="idCardType"
+                                            onChange={event => setIDCardType(event.target.value)}
+                                            value={idCardType}>
+                                            <MenuItem value="Ghana Card">Ghana Card</MenuItem>
+                                            <MenuItem value="Passport">Passport</MenuItem>
+                                            <MenuItem value="Voters">Voter's ID</MenuItem>
+                                            <MenuItem value="Drivers License">Driver's Licence</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    <TextField
+                                        fullWidth={true}
+                                        label="ID Card Number"
+                                        required={true}
+                                        size="medium"
+                                        error={Boolean(error.idCardNumber)}
+                                        helperText={error.idCardNumber}
+                                        variant="outlined"
+                                        name="idCardNumber"
+                                        onChange={handleChange}
+                                        placeholder="ID Card Number"
+                                        value={idCardNumber}
+                                    />
                                 </Stack>
                             </CardContent>
                         </Card>
                     </Grid>
 
-                    <Grid item={true} xs={12} md={4}>
+                    <Grid item={true} xs={12} md={6}>
                         <Card elevation={1} variant="elevation">
                             <CardContent>
-                                <Typography gutterBottom={true} variant="h6" align="center">Mother's
-                                    Information</Typography>
+                                <Typography gutterBottom={true} variant="h6" align="center">
+                                    Mother's Information
+                                </Typography>
 
                                 <Stack direction="column" spacing={2}>
                                     <Box>
@@ -497,7 +570,7 @@ const Certificate = () => {
                         </Card>
                     </Grid>
 
-                    <Grid item={true} xs={12} md={4}>
+                    <Grid item={true} xs={12} md={6}>
                         <Card elevation={1} variant="elevation">
                             <CardContent>
                                 <Typography variant="h6" align="center">Father's Information</Typography>
@@ -558,6 +631,39 @@ const Certificate = () => {
                                             <MenuItem value="Bachelor">University / College</MenuItem>
                                         </Select>
                                     </FormControl>
+
+                                    <Box>
+                                        <TextField
+                                            fullWidth={true}
+                                            label="Occupation"
+                                            required={true}
+                                            size="medium"
+                                            error={Boolean(error.fatherOccupation)}
+                                            helperText={error.fatherOccupation}
+                                            variant="outlined"
+                                            defaultValue=""
+                                            name="fatherOccupation"
+                                            onChange={handleChange}
+                                            value={fatherOccupation}
+                                        />
+                                    </Box>
+
+                                    <Box>
+                                        <TextField
+                                            fullWidth={true}
+                                            label="Nationality"
+                                            required={true}
+                                            size="medium"
+                                            error={Boolean(error.fatherNationality)}
+                                            helperText={error.fatherNationality}
+                                            variant="outlined"
+                                            name="fatherNationality"
+                                            onChange={handleChange}
+                                            value={fatherNationality}
+                                            type="text"
+                                            placeholder="Enter nationality"
+                                        />
+                                    </Box>
                                 </Stack>
                             </CardContent>
                         </Card>

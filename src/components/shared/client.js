@@ -81,7 +81,6 @@ const Client = () => {
                                 margin="dense"
                                 helperText={error.name}
                                 variant="outlined"
-                                defaultValue=""
                                 name="name"
                                 onChange={handleChange}
                                 value={name}
@@ -99,7 +98,6 @@ const Client = () => {
                                 helperText={error.email}
                                 variant="outlined"
                                 name="email"
-                                defaultValue=""
                                 onChange={handleChange}
                                 value={email}
                                 type="email"
@@ -116,14 +114,13 @@ const Client = () => {
                                 error={Boolean(error.phone)}
                                 helperText={error.phone}
                                 variant="outlined"
-                                defaultValue=""
                                 name="phone"
                                 onChange={handleChange}
                                 value={phone}
+                                type="tel"
                                 placeholder="Enter phone number"
                             />
                         </Box>
-
                     </Stack>
 
                     <Divider sx={{my: 2}} variant="fullWidth" light={true}/>

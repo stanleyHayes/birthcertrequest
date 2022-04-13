@@ -66,9 +66,6 @@ const requestReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 loading: false,
                 error: action.payload,
-                certificate: {},
-                client: {},
-                payment: {}
             }
         default:
             return state;

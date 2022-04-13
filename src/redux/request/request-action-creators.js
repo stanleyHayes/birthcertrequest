@@ -83,9 +83,9 @@ const submitRequest = (request) => {
             const {data, message} = response.data;
             dispatch(createRequestSuccess(data));
             dispatch(REQUEST_ACTION_CREATORS.nextPage());
-            console.log(message);
         }catch (e) {
             const {message} = e.response.data;
+            console.log(message)
             dispatch(createRequestFailure(message));
         }
     }

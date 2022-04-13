@@ -1,4 +1,16 @@
-import {Box, Button, Card, CardContent, Divider, Grid, LinearProgress, Stack, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Container,
+    Divider,
+    Grid,
+    LinearProgress,
+    Typography,
+    Alert,
+    AlertTitle
+} from "@mui/material";
 import {CheckCircle, ChevronLeft} from "@mui/icons-material";
 import {REQUEST_ACTION_CREATORS} from "../../redux/request/request-action-creators";
 import {useDispatch, useSelector} from "react-redux";
@@ -11,7 +23,7 @@ const Summary = () => {
     const {page} = useSelector(selectRequest);
     const dispatch = useDispatch();
 
-    const {client, certificate, payment, loading} = useSelector(selectRequest);
+    const {client, certificate, payment, loading, error} = useSelector(selectRequest);
 
     const handleSubmit = () => {
         dispatch(PAYMENT_ACTION_CREATORS.submitPayment({
@@ -35,6 +47,8 @@ const Summary = () => {
             mother_nationality: certificate.motherNationality,
             name_of_father: certificate.nameOfFather,
             age_of_father: certificate.ageOfFather,
+            father_occupation: certificate.fatherOccupation,
+            father_nationality: certificate.fatherNationality,
             father_level_of_education: certificate.fatherLevelOfEducation,
             telephone_number: certificate.telephoneNumber,
             house_number: certificate.houseNumber,
@@ -42,346 +56,461 @@ const Summary = () => {
             full_name_of_informant: certificate.fullNameOfInformant,
             contact_name: client.name,
             contact_email: client.email,
-            contact_phone: client.phone
+            contact_phone: client.phone,
+            provider: payment.provider,
+            id_card_type: certificate.idCardType,
+            id_card_number: certificate.idCardNumber
         }));
     }
 
     return (
         <Layout>
-            <Card elevation={1} variant="elevation">
-                {loading && <LinearProgress variant="query" color="primary"/>}
-                <CardContent>
-                    <Typography variant="h4" align="center">Summary</Typography>
+            {loading && <LinearProgress variant="query" color="primary"/>}
+            <Container>
+                <Typography variant="h4" align="center">Summary</Typography>
 
-                    <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
+                <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
 
-                    <Stack
-                        divider={<Divider light={true} variant="fullWidth"/>}
-                        direction="column"
-                        spacing={4}>
-                        <Box>
-                            <Grid container={true} justifyContent="space-between">
-                                <Grid item={true}>
+                <Grid container={true} justifyContent="space-between" spacing={2}>
+                    <Grid item={true} xs={12} md="auto">
+                        <Button
+                            sx={{color: 'white'}}
+                            onClick={() => dispatch(REQUEST_ACTION_CREATORS.previousPage())}
+                            variant="contained"
+                            startIcon={<ChevronLeft sx={{color: 'white'}}/>}
+                            fullWidth={true}
+                            disableElevation={true}
+                            size="medium"
+                            color="secondary"
+                            disabled={page === 0}>
+                            Previous
+                        </Button>
+                    </Grid>
+
+                    <Grid item={true} xs={12} md="auto">
+                        <Button
+                            onClick={handleSubmit}
+                            size="medium"
+                            variant="contained"
+                            disableElevation={true}
+                            fullWidth={true}
+                            endIcon={<CheckCircle/>}
+                            disabled={loading}>
+                            Submit
+                        </Button>
+                    </Grid>
+                </Grid>
+
+                <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
+
+                {
+                    error &&
+                    (
+                        <Alert severity="error" variant="standard">
+                            <AlertTitle>Error</AlertTitle>
+                            <Typography variant="h6" align="center">
+                                {error}
+                            </Typography>
+                        </Alert>
+                    )
+                }
+
+                <Grid sx={{mb: 2}} container={true} spacing={2}>
+                    <Grid item={true} xs={12} md={6}>
+                        <Card elevation={1} variant="elevation">
+                            {loading && <LinearProgress variant="query" color="primary"/>}
+                            <CardContent>
+                                <Box>
+
                                     <Typography
                                         gutterBottom={true}
                                         variant="h5">
-                                        Client
+                                        Personal Information
                                     </Typography>
-                                </Grid>
-                                <Grid item={true}>
-                                    <Button
-                                        size="small"
-                                        color="primary"
-                                        onClick={() => dispatch(REQUEST_ACTION_CREATORS.gotoPage(2))}
-                                        variant="outlined">Edit</Button>
-                                </Grid>
-                            </Grid>
 
+                                    <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
 
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Name
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {client.name}
-                                </Typography>
-                            </Box>
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            First Name
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.firstName}
+                                        </Typography>
+                                    </Box>
 
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Email
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {client.email}
-                                </Typography>
-                            </Box>
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Middle Name
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.middleName}
+                                        </Typography>
+                                    </Box>
 
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Phone
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {client.phone}
-                                </Typography>
-                            </Box>
-                        </Box>
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Last Name
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.lastName}
+                                        </Typography>
+                                    </Box>
 
-                        <Box>
-                            <Grid container={true} justifyContent="space-between">
-                                <Grid item={true}>
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Date of Birth
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {new Date(certificate.dateOfBirth).toDateString()}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+
+                    <Grid item={true} xs={12} md={6}>
+                        <Card elevation={1} variant="elevation">
+                            {loading && <LinearProgress variant="query" color="primary"/>}
+                            <CardContent>
+                                <Box>
                                     <Typography
                                         gutterBottom={true}
-                                        variant="h5"
-                                        align="center">
+                                        variant="h5">
+                                        Other Information
+                                    </Typography>
+
+                                    <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Sex
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.sex}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Place of Birth
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.placeOfBirth}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            ID Card Type
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.idCardType}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            ID Card Number
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.idCardNumber}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+
+                <Grid sx={{mb: 2}} container={true} spacing={2}>
+                    <Grid item={true} xs={12} md={6}>
+                        <Card elevation={1} variant="elevation">
+                            {loading && <LinearProgress variant="query" color="primary"/>}
+                            <CardContent>
+                                <Typography
+                                    gutterBottom={true}
+                                    variant="h5">
+                                    Mother's Information
+                                </Typography>
+
+                                <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Mother's Maiden Name
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {certificate.motherMaidenName}
+                                    </Typography>
+                                </Box>
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Mother's Age
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {certificate.ageOfMother}
+                                    </Typography>
+                                </Box>
+
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Mother's Level of Education
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {certificate.motherLevelOfEducation}
+                                    </Typography>
+                                </Box>
+
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Mother's Occupation
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {certificate.motherOccupation}
+                                    </Typography>
+                                </Box>
+
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Mother's Nationality
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {certificate.motherNationality}
+                                    </Typography>
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+
+                    <Grid item={true} xs={12} md={6}>
+                        <Card elevation={1} variant="elevation">
+                            {loading && <LinearProgress variant="query" color="primary"/>}
+                            <CardContent>
+                                <Box>
+                                    <Typography
+                                        gutterBottom={true}
+                                        variant="h5">
+                                        Father's Information
+                                    </Typography>
+
+                                    <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Father's Name
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.nameOfFather}
+                                        </Typography>
+                                    </Box>
+
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Father's Age
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.ageOfFather}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Father's Level of Education
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.fatherLevelOfEducation}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Father's Occupation
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.fatherOccupation}
+                                        </Typography>
+                                    </Box>
+
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Father's Nationality
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {certificate.fatherNationality}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+
+                <Grid container={true} spacing={2}>
+                    <Grid item={true} xs={12} md={4}>
+                        <Card elevation={1} variant="elevation">
+                            {loading && <LinearProgress variant="query" color="primary"/>}
+                            <CardContent>
+
+                                <Typography
+                                    gutterBottom={true}
+                                    variant="h5">
+                                    Contact
+                                </Typography>
+
+                                <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Name
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {client.name}
+                                    </Typography>
+                                </Box>
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Email
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {client.email}
+                                    </Typography>
+                                </Box>
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Phone
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {client.phone}
+                                    </Typography>
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+
+                    <Grid item={true} xs={12} md={4}>
+                        <Card elevation={1} variant="elevation">
+                            {loading && <LinearProgress variant="query" color="primary"/>}
+                            <CardContent>
+                                <Box>
+                                    <Typography
+                                        gutterBottom={true}
+                                        variant="h5">
                                         Payment
                                     </Typography>
-                                </Grid>
-                                <Grid item={true}>
-                                    <Button
-                                        size="small"
-                                        color="primary"
-                                        onClick={() => dispatch(REQUEST_ACTION_CREATORS.gotoPage(3))}
-                                        variant="outlined">Edit</Button>
-                                </Grid>
-                            </Grid>
 
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Name
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {payment.name}
-                                </Typography>
-                            </Box>
+                                    <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
 
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Transaction ID
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {payment.transactionID}
-                                </Typography>
-                            </Box>
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Name
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {payment.name}
+                                        </Typography>
+                                    </Box>
 
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Amount
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {payment.amount} GHS
-                                </Typography>
-                            </Box>
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Transaction ID
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {payment.transactionID}
+                                        </Typography>
+                                    </Box>
 
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Phone
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {payment.phone}
-                                </Typography>
-                            </Box>
-                        </Box>
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Amount
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {payment.amount} GHS
+                                        </Typography>
+                                    </Box>
 
-                        <Box>
-                            <Grid container={true} justifyContent="space-between">
-                                <Grid item={true}>
-                                    <Typography
-                                        gutterBottom={true}
-                                        variant="h5"
-                                        align="center">
-                                        Certificate
-                                    </Typography>
-                                </Grid>
-                                <Grid item={true}>
-                                    <Button
-                                        size="small"
-                                        color="primary"
-                                        onClick={() => dispatch(REQUEST_ACTION_CREATORS.gotoPage(4))}
-                                        variant="outlined">Edit</Button>
-                                </Grid>
-                            </Grid>
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Network Provider
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {payment.provider}
+                                        </Typography>
+                                    </Box>
 
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    First Name
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.firstName}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Middle Name
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.middleName}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Last Name
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.lastName}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Date of Birth
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {new Date(certificate.dateOfBirth).toDateString()}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Sex
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.sex}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Place of Birth
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.placeOfBirth}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Mother's Maiden Name
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.motherMaidenName}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Mother's Age
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.ageOfMother}
-                                </Typography>
-                            </Box>
-
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Mother's Level of Education
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.motherLevelOfEducation}
-                                </Typography>
-                            </Box>
-
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Mother's Occupation
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.motherOccupation}
-                                </Typography>
-                            </Box>
-
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Mother's Nationality
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.motherNationality}
-                                </Typography>
-                            </Box>
-
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Father's Name
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.nameOfFather}
-                                </Typography>
-                            </Box>
-
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Father's Age
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.ageOfFather}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Father's Level of Education
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.fatherLevelOfEducation}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Telephone Number
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.telephoneNumber}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    House Number
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.houseNumber}
-                                </Typography>
-                            </Box>
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Religion
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.religion}
-                                </Typography>
-                            </Box>
-
-
-                            <Box mb={2}>
-                                <Typography gutterBottom={true} variant="body2">
-                                    Full name of informant
-                                </Typography>
-                                <Typography gutterBottom={true} variant="h6">
-                                    {certificate.fullNameOfInformant}
-                                </Typography>
-                            </Box>
-                        </Box>
-                    </Stack>
-
-                    <Divider sx={{my: 2}} variant="fullWidth" light={true}/>
-
-                    <Grid container={true} justifyContent="space-between" spacing={2}>
-                        <Grid item={true} xs={12} md="auto">
-                            <Button
-                                onClick={() => dispatch(REQUEST_ACTION_CREATORS.previousPage())}
-                                variant="outlined"
-                                startIcon={<ChevronLeft/>}
-                                fullWidth={true}
-                                size="medium"
-                                color="secondary"
-                                disabled={page === 0}>
-                                Previous
-                            </Button>
-                        </Grid>
-
-                        <Grid item={true} xs={12} md="auto">
-                            <Button
-                                onClick={handleSubmit}
-                                size="medium"
-                                variant="contained"
-                                disableElevation={true}
-                                fullWidth={true}
-                                endIcon={<CheckCircle/>}
-                                disabled={loading}>
-                                Submit
-                            </Button>
-                        </Grid>
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Phone
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {payment.phone}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </CardContent>
+                        </Card>
                     </Grid>
-                </CardContent>
-            </Card>
+
+                    <Grid item={true} xs={12} md={4}>
+                        <Card elevation={1} variant="elevation">
+                            {loading && <LinearProgress variant="query" color="primary"/>}
+                            <CardContent>
+                                <Typography
+                                    gutterBottom={true}
+                                    variant="h5">
+                                    Contact
+                                </Typography>
+
+                                <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Telephone Number
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {certificate.telephoneNumber}
+                                    </Typography>
+                                </Box>
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        House Number
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {certificate.houseNumber}
+                                    </Typography>
+                                </Box>
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Religion
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {certificate.religion}
+                                    </Typography>
+                                </Box>
+
+                                <Box mb={2}>
+                                    <Typography gutterBottom={true} variant="body2">
+                                        Full name of informant
+                                    </Typography>
+                                    <Typography gutterBottom={true} variant="h6">
+                                        {certificate.fullNameOfInformant}
+                                    </Typography>
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+            </Container>
         </Layout>
     )
 }

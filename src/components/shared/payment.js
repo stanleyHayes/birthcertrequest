@@ -1,4 +1,18 @@
-import {Box, Button, Card, CardContent, Divider, Grid, Stack, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Divider,
+    Grid,
+    Stack,
+    TextField,
+    Typography,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Select
+} from "@mui/material";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
 import {REQUEST_ACTION_CREATORS} from "../../redux/request/request-action-creators";
 import {useDispatch, useSelector} from "react-redux";
@@ -12,6 +26,7 @@ const Payment = () => {
     const dispatch = useDispatch();
 
     const [payment, setPayment] = useState({...p});
+    const [provider, setProvider] = useState("");
     const [error, setError] = useState({});
 
     const {name, phone, transactionID, amount} = payment;
@@ -21,43 +36,49 @@ const Payment = () => {
     }
     const handleButtonClick = () => {
 
-        if(!name){
+        if (!name) {
             setError({error, name: 'Field required'});
             return;
-        }else {
+        } else {
             setError({error, name: null});
         }
 
-        if(!phone){
+        if (!phone) {
             setError({error, phone: 'Field required'});
             return;
-        }else {
+        } else {
             setError({error, phone: null});
         }
 
-        if(!validator.isMobilePhone(phone)){
+        if (!validator.isMobilePhone(phone)) {
             setError({error, phone: 'Invalid phone'});
             return;
-        }else {
+        } else {
             setError({error, phone: null});
         }
 
-
-        if(!transactionID){
+        if (!transactionID) {
             setError({error, transactionID: 'Field required'});
             return;
-        }else {
+        } else {
             setError({error, transactionID: null});
         }
 
-        if(!amount || Number(amount) < 0){
+        if (!amount || Number(amount) < 0) {
             setError({error, amount: 'Invalid amount'});
             return;
-        }else {
+        } else {
             setError({error, amount: null});
         }
 
-        dispatch(REQUEST_ACTION_CREATORS.savePayment({name, phone, transactionID, amount}));
+        if (!provider) {
+            setError({error, provider: 'Field required'});
+            return;
+        } else {
+            setError({error, provider: null});
+        }
+
+        dispatch(REQUEST_ACTION_CREATORS.savePayment({name, phone, transactionID, amount, provider}));
         dispatch(REQUEST_ACTION_CREATORS.nextPage());
     }
 
@@ -89,6 +110,25 @@ const Payment = () => {
                             />
                         </Box>
 
+                        <FormControl>
+                            <InputLabel>Network Provider</InputLabel>
+                            <Select
+                                select={true}
+                                fullWidth={true}
+                                label="Provider"
+                                required={true}
+                                size="medium"
+                                error={Boolean(error.provider)}
+                                variant="outlined"
+                                name="provider"
+                                onChange={event => setProvider(event.target.value)}
+                                value={provider}>
+                                <MenuItem value="Momo">MTN Momo</MenuItem>
+                                <MenuItem value="AirtelTigo">AirtelTigo</MenuItem>
+                                <MenuItem value="Vodafone Cash">Vodafone Cash</MenuItem>
+                            </Select>
+                        </FormControl>
+
                         <Box>
                             <TextField
                                 fullWidth={true}
@@ -99,7 +139,6 @@ const Payment = () => {
                                 helperText={error.phone}
                                 variant="outlined"
                                 name="phone"
-                                defaultValue=""
                                 onChange={handleChange}
                                 value={phone}
                                 placeholder="Enter phone number"
@@ -116,7 +155,6 @@ const Payment = () => {
                                 helperText={error.amount}
                                 variant="outlined"
                                 name="amount"
-                                defaultValue=""
                                 onChange={handleChange}
                                 value={amount}
                                 type="number"
