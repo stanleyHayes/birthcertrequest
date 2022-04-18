@@ -7,6 +7,7 @@ import Payment from "../../components/shared/payment";
 import Certificate from "../../components/shared/certificate";
 import Summary from "../../components/shared/summary";
 import Confirmation from "../../components/shared/confirmation";
+import Identity from "../../components/shared/identity";
 
 const IndexPage = () => {
 
@@ -19,12 +20,14 @@ const IndexPage = () => {
             case 1:
                 return <Client/>;
             case 2:
-                return <Payment/>;
-            case 3:
                 return <Certificate/>;
+            case 3:
+                return <Payment/>;
             case 4:
-                return <Summary/>;
+                return <Identity/>;
             case 5:
+                return <Summary/>;
+            case 6:
                 return <Confirmation/>;
             default:
                 return <Welcome/>;

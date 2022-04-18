@@ -20,10 +20,9 @@ import Layout from "../layout/layout";
 
 const Summary = () => {
 
-    const {page} = useSelector(selectRequest);
     const dispatch = useDispatch();
 
-    const {client, certificate, payment, loading, error} = useSelector(selectRequest);
+    const {client, certificate, payment, loading, error, identity} = useSelector(selectRequest);
 
     const handleSubmit = () => {
         dispatch(PAYMENT_ACTION_CREATORS.submitPayment({
@@ -59,7 +58,22 @@ const Summary = () => {
             contact_phone: client.phone,
             provider: payment.provider,
             id_card_type: certificate.idCardType,
-            id_card_number: certificate.idCardNumber
+            id_card_number: certificate.idCardNumber,
+            date_of_baptism: identity.dateOfBaptism,
+            place_of_baptism: identity.placeOfBaptism,
+            baptiser: identity.baptiser,
+            district: identity.district,
+            serial_number: identity.serialNumber,
+            registration_number: identity.registrationNumber,
+            nhis_number: identity.NHISNumber,
+            sickle_cell_status: identity.sickleCellStatus,
+            birth_weight: identity.birthWeight,
+            birth_length: identity.birthLength,
+            head_circumference: identity.headCircumference,
+            birth_registration: identity.birthRegistration,
+            g6pd_status: identity.G6PDStatus,
+            gestation_age: identity.gestationalAge,
+            variant: identity.variant
         }));
     }
 
@@ -82,7 +96,7 @@ const Summary = () => {
                             disableElevation={true}
                             size="medium"
                             color="secondary"
-                            disabled={page === 0}>
+                            disabled={loading}>
                             Previous
                         </Button>
                     </Grid>
@@ -144,7 +158,7 @@ const Summary = () => {
                                             Middle Name
                                         </Typography>
                                         <Typography gutterBottom={true} variant="h6">
-                                            {certificate.middleName}
+                                            {certificate.middleName ? certificate.middleName : 'No middle name'}
                                         </Typography>
                                     </Box>
 
@@ -353,8 +367,8 @@ const Summary = () => {
                     </Grid>
                 </Grid>
 
-                <Grid container={true} spacing={2}>
-                    <Grid item={true} xs={12} md={4}>
+                <Grid sx={{mb: 2}} container={true} spacing={2}>
+                    <Grid item={true} xs={12} md={6}>
                         <Card elevation={1} variant="elevation">
                             {loading && <LinearProgress variant="query" color="primary"/>}
                             <CardContent>
@@ -397,7 +411,7 @@ const Summary = () => {
                         </Card>
                     </Grid>
 
-                    <Grid item={true} xs={12} md={4}>
+                    <Grid item={true} xs={12} md={6}>
                         <Card elevation={1} variant="elevation">
                             {loading && <LinearProgress variant="query" color="primary"/>}
                             <CardContent>
@@ -459,7 +473,10 @@ const Summary = () => {
                         </Card>
                     </Grid>
 
-                    <Grid item={true} xs={12} md={4}>
+                </Grid>
+
+                <Grid container={true} spacing={2}>
+                    <Grid item={true} xs={12} md={6}>
                         <Card elevation={1} variant="elevation">
                             {loading && <LinearProgress variant="query" color="primary"/>}
                             <CardContent>
@@ -509,7 +526,169 @@ const Summary = () => {
                             </CardContent>
                         </Card>
                     </Grid>
+
+                    {identity.variant === 'baptism' ? (
+                        <Grid item={true} xs={12} md={6}>
+                            <Card elevation={1} variant="elevation">
+                                {loading && <LinearProgress variant="query" color="primary"/>}
+                                <CardContent>
+                                    <Box>
+                                        <Typography
+                                            gutterBottom={true}
+                                            variant="h5">
+                                            Identity (Baptism)
+                                        </Typography>
+
+                                        <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
+                                        <Box mb={2}>
+                                            <Typography gutterBottom={true} variant="body2">
+                                                Baptiser
+                                            </Typography>
+                                            <Typography gutterBottom={true} variant="h6">
+                                                {identity.baptiser}
+                                            </Typography>
+                                        </Box>
+
+                                        <Box mb={2}>
+                                            <Typography gutterBottom={true} variant="body2">
+                                                Place of Baptism
+                                            </Typography>
+                                            <Typography gutterBottom={true} variant="h6">
+                                                {identity.placeOfBaptism}
+                                            </Typography>
+                                        </Box>
+
+                                        <Box mb={2}>
+                                            <Typography gutterBottom={true} variant="body2">
+                                                Date of Baptism
+                                            </Typography>
+                                            <Typography gutterBottom={true} variant="h6">
+                                                {new Date(identity.dateOfBaptism).toDateString()}
+                                            </Typography>
+                                        </Box>
+
+                                        <Box mb={2}>
+                                            <Typography gutterBottom={true} variant="body2">
+                                                District
+                                            </Typography>
+                                            <Typography gutterBottom={true} variant="h6">
+                                                {identity.district}
+                                            </Typography>
+                                        </Box>
+
+                                        <Box mb={2}>
+                                            <Typography gutterBottom={true} variant="body2">
+                                                Phone
+                                            </Typography>
+                                            <Typography gutterBottom={true} variant="h6">
+                                                {payment.phone}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+
+                    ) : (
+                        <Grid item={true} xs={12} md={6}>
+                            <Card elevation={1} variant="elevation">
+                                {loading && <LinearProgress variant="query" color="primary"/>}
+                                <CardContent>
+                                    <Typography
+                                        gutterBottom={true}
+                                        variant="h5">
+                                        Identity (Weighing)
+                                    </Typography>
+
+                                    <Divider sx={{my: 2}} light={true} variant="fullWidth"/>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Serial Number
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {identity.serialNumber}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Registration Number
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {identity.registrationNumber}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            NHIS Number
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {identity.NHISNumber}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Sickle Cell Status
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {identity.sickleCellStatus}
+                                        </Typography>
+                                    </Box>
+
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Birth Weight
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {identity.birthWeight} KG
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Birth Length
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {identity.birthLength} CM
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Head Circumference
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {identity.headCircumference}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            G6PD Status
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {identity.G6PDStatus}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box mb={2}>
+                                        <Typography gutterBottom={true} variant="body2">
+                                            Gestation Age
+                                        </Typography>
+                                        <Typography gutterBottom={true} variant="h6">
+                                            {identity.gestationalAge}
+                                        </Typography>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    )}
                 </Grid>
+
             </Container>
         </Layout>
     )

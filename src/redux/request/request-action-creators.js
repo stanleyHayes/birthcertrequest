@@ -31,6 +31,12 @@ const saveCertificate = certificate => {
     }
 }
 
+const saveIdentity = identity => {
+    return {
+        type: REQUEST_ACTION_TYPES.SAVE_IDENTITY,
+        payload: identity
+    }
+}
 
 const savePayment = payment => {
     return {
@@ -85,7 +91,6 @@ const submitRequest = (request) => {
             dispatch(REQUEST_ACTION_CREATORS.nextPage());
         }catch (e) {
             const {message} = e.response.data;
-            console.log(message)
             dispatch(createRequestFailure(message));
         }
     }
@@ -99,5 +104,6 @@ export const REQUEST_ACTION_CREATORS = {
     saveCertificate,
     savePayment,
     saveClient,
-    submitRequest
+    submitRequest,
+    saveIdentity
 };

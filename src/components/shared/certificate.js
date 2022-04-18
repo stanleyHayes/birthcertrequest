@@ -446,9 +446,7 @@ const Certificate = () => {
                                             value={idCardType}>
                                             <MenuItem value="Ghana Card">Ghana Card</MenuItem>
                                             <MenuItem value="Passport">Passport</MenuItem>
-                                            <MenuItem value="Voters">Voter's ID</MenuItem>
-                                            <MenuItem value="Drivers License">Driver's Licence</MenuItem>
-                                        </Select>
+                                            </Select>
                                     </FormControl>
                                     <TextField
                                         fullWidth={true}

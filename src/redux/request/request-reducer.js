@@ -6,6 +6,7 @@ const INITIAL_STATE = {
     error: null,
     certificate: {},
     payment: {},
+    identity: {},
     page: 0
 };
 
@@ -33,6 +34,12 @@ const requestReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 client: action.payload
+            }
+
+        case REQUEST_ACTION_TYPES.SAVE_IDENTITY:
+            return {
+                ...state,
+                identity: action.payload
             }
 
         case REQUEST_ACTION_TYPES.SAVE_PAYMENT:

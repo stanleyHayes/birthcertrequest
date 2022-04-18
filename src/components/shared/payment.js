@@ -20,13 +20,14 @@ import {selectRequest} from "../../redux/request/request-reducer";
 import {useState} from "react";
 import validator from "validator";
 import Layout from "../layout/layout";
+import moment from "moment";
 
 const Payment = () => {
-    const {page, payment: p} = useSelector(selectRequest);
+    const {page, payment: p, certificate} = useSelector(selectRequest);
     const dispatch = useDispatch();
 
     const [payment, setPayment] = useState({...p});
-    const [provider, setProvider] = useState("");
+    const [provider, setProvider] = useState(p.provider);
     const [error, setError] = useState({});
 
     const {name, phone, transactionID, amount} = payment;
@@ -35,50 +36,61 @@ const Payment = () => {
         setPayment({...payment, [event.target.name]: event.target.value});
     }
     const handleButtonClick = () => {
+        if (!moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())) {
+            if (!name) {
+                setError({error, name: 'Field required'});
+                return;
+            } else {
+                setError({error, name: null});
+            }
 
-        if (!name) {
-            setError({error, name: 'Field required'});
-            return;
-        } else {
-            setError({error, name: null});
+            if (!phone) {
+                setError({error, phone: 'Field required'});
+                return;
+            } else {
+                setError({error, phone: null});
+            }
+
+            if (!validator.isMobilePhone(phone)) {
+                setError({error, phone: 'Invalid phone'});
+                return;
+            } else {
+                setError({error, phone: null});
+            }
+
+            if (!transactionID) {
+                setError({error, transactionID: 'Field required'});
+                return;
+            } else {
+                setError({error, transactionID: null});
+            }
+
+            if (!amount || Number(amount) < 0) {
+                setError({error, amount: 'Invalid amount'});
+                return;
+            } else {
+                setError({error, amount: null});
+            }
+
+            if (!provider) {
+                setError({error, provider: 'Field required'});
+                return;
+            } else {
+                setError({error, provider: null});
+            }
+
+            dispatch(REQUEST_ACTION_CREATORS.savePayment({name, phone, transactionID, amount, provider}));
+        }
+        else {
+            dispatch(REQUEST_ACTION_CREATORS.savePayment({
+                name: 'Free',
+                phone: 'Free',
+                transactionID: 'Free',
+                amount: 0,
+                provider: 'Free'
+            }));
         }
 
-        if (!phone) {
-            setError({error, phone: 'Field required'});
-            return;
-        } else {
-            setError({error, phone: null});
-        }
-
-        if (!validator.isMobilePhone(phone)) {
-            setError({error, phone: 'Invalid phone'});
-            return;
-        } else {
-            setError({error, phone: null});
-        }
-
-        if (!transactionID) {
-            setError({error, transactionID: 'Field required'});
-            return;
-        } else {
-            setError({error, transactionID: null});
-        }
-
-        if (!amount || Number(amount) < 0) {
-            setError({error, amount: 'Invalid amount'});
-            return;
-        } else {
-            setError({error, amount: null});
-        }
-
-        if (!provider) {
-            setError({error, provider: 'Field required'});
-            return;
-        } else {
-            setError({error, provider: null});
-        }
-
-        dispatch(REQUEST_ACTION_CREATORS.savePayment({name, phone, transactionID, amount, provider}));
         dispatch(REQUEST_ACTION_CREATORS.nextPage());
     }
 
@@ -87,9 +99,14 @@ const Payment = () => {
             <Card elevation={1} variant="elevation">
                 <CardContent>
                     <Typography gutterBottom={true} variant="h4" align="center">Payment</Typography>
-                    <Typography gutterBottom={true} variant="body2" align="center">
+                    <Typography mb={2} gutterBottom={true} variant="body2" align="center">
                         This information should be about your payment
                     </Typography>
+                    {moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now()) && (
+                        <Typography fontWeight="bold" color="primary" mb={2} gutterBottom={true} variant="body2" align="center">
+                            Free for children under 1 year. Click next to proceed.
+                        </Typography>
+                    )}
 
                     <Stack direction="column" spacing={2}>
                         <Box>
@@ -103,7 +120,7 @@ const Payment = () => {
                                 helperText={error.name}
                                 variant="outlined"
                                 name="name"
-                                defaultValue=""
+                                disabled={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())}
                                 onChange={handleChange}
                                 value={name}
                                 placeholder="Enter name"
@@ -113,6 +130,7 @@ const Payment = () => {
                         <FormControl>
                             <InputLabel>Network Provider</InputLabel>
                             <Select
+                                disabled={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())}
                                 select={true}
                                 fullWidth={true}
                                 label="Provider"
@@ -131,6 +149,7 @@ const Payment = () => {
 
                         <Box>
                             <TextField
+                                disabled={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())}
                                 fullWidth={true}
                                 label="Phone"
                                 required={true}
@@ -147,6 +166,7 @@ const Payment = () => {
 
                         <Box>
                             <TextField
+                                disabled={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())}
                                 fullWidth={true}
                                 label="Amount"
                                 required={true}
@@ -156,7 +176,7 @@ const Payment = () => {
                                 variant="outlined"
                                 name="amount"
                                 onChange={handleChange}
-                                value={amount}
+                                value={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now()) ? 0 : 20}
                                 type="number"
                                 placeholder="Enter amount paid"
                             />
@@ -168,6 +188,7 @@ const Payment = () => {
                                 label="Transaction ID"
                                 required={true}
                                 size="medium"
+                                disabled={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())}
                                 error={Boolean(error.transactionID)}
                                 helperText={error.transactionID}
                                 variant="outlined"
