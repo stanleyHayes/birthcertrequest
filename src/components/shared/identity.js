@@ -289,9 +289,9 @@ const Identity = () => {
                                         onChange={handleWeightingIdentityChange}
                                         value={sickleCellStatus}>
                                         <MenuItem value=""></MenuItem>
-                                        <MenuItem value="Momo">MTN Momo</MenuItem>
-                                        <MenuItem value="AirtelTigo">AirtelTigo</MenuItem>
-                                        <MenuItem value="Vodafone Cash">Vodafone Cash</MenuItem>
+                                        <MenuItem value="">Select Status</MenuItem>
+                                        <MenuItem value="Negative">Negative</MenuItem>
+                                        <MenuItem value="Positive">Positive</MenuItem>
                                     </Select>
                                 </FormControl>
 
@@ -359,9 +359,9 @@ const Identity = () => {
                                         name="G6PDStatus"
                                         onChange={handleWeightingIdentityChange}
                                         value={G6PDStatus}>
-                                        <MenuItem value="Momo">MTN Momo</MenuItem>
-                                        <MenuItem value="AirtelTigo">AirtelTigo</MenuItem>
-                                        <MenuItem value="Vodafone Cash">Vodafone Cash</MenuItem>
+                                        <MenuItem value="">Select Status</MenuItem>
+                                        <MenuItem value="Negative">Negative</MenuItem>
+                                        <MenuItem value="Positive">Positive</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Stack>
