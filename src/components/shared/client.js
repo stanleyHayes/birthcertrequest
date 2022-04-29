@@ -28,21 +28,6 @@ const Client = () => {
             setError({error, name: null});
         }
 
-        if(!email){
-            setError({error, email: 'Field required'});
-            return;
-        }else {
-            setError({error, email: null});
-        }
-
-        if(!validator.isEmail(email)){
-            setError({error, email: 'Invalid email'});
-            return;
-        }else {
-            setError({error, email: null});
-        }
-
-
         if(!phone){
             setError({error, phone: 'Field required'});
             return;
@@ -92,10 +77,7 @@ const Client = () => {
                             <TextField
                                 fullWidth={true}
                                 label="Email"
-                                required={true}
                                 size="medium"
-                                error={Boolean(error.email)}
-                                helperText={error.email}
                                 variant="outlined"
                                 name="email"
                                 onChange={handleChange}

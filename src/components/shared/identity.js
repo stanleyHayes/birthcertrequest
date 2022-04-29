@@ -4,14 +4,14 @@ import {
     Card,
     CardContent,
     Divider,
+    FormControl,
     Grid,
+    InputLabel,
+    MenuItem,
+    Select,
     Stack,
     TextField,
-    Typography,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Select
+    Typography
 } from "@mui/material";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
 import {REQUEST_ACTION_CREATORS} from "../../redux/request/request-action-creators";
@@ -19,7 +19,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectRequest} from "../../redux/request/request-reducer";
 import {useState} from "react";
 import Layout from "../layout/layout";
-import moment from "moment";
 import {DatePicker} from "@mui/lab";
 
 const Identity = () => {
@@ -187,7 +186,7 @@ const Identity = () => {
                     <Typography gutterBottom={true} variant="h4" align="center">Identity</Typography>
 
                     {
-                        moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now()) ? (
+                        certificate.isUnderOneYear ? (
                             <Stack direction="column" spacing={2}>
                                 <Typography variant="h6">Weighing Information </Typography>
                                 <Box>
@@ -460,7 +459,7 @@ const Identity = () => {
                         </Grid>
 
                         {
-                            moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now()) ? (
+                            certificate.isUnderOneYear ? (
                                 <Grid item={true} xs={12} md="auto">
                                     <Button
                                         onClick={handleWeightButtonClick}
@@ -487,7 +486,6 @@ const Identity = () => {
                                     </Button>
                                 </Grid>
                             )}
-
                     </Grid>
                 </CardContent>
             </Card>

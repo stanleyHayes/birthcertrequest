@@ -66,6 +66,10 @@ const requestReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 loading: false,
                 error: null,
+                certificate: {},
+                payment: {},
+                identity: {},
+                client: {}
             }
 
         case REQUEST_ACTION_TYPES.CREATE_REQUEST_FAILURE:

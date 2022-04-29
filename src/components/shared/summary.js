@@ -29,7 +29,9 @@ const Summary = () => {
             transaction_id: payment.transactionID,
             phone: payment.phone,
             amount: payment.amount,
-            name: payment.name
+            name: payment.name,
+            status: certificate?.isUnderOneYear ? 'Waived': 'Pending',
+            provider: payment.provider
         }));
 
         dispatch(REQUEST_ACTION_CREATORS.submitRequest({
@@ -575,20 +577,10 @@ const Summary = () => {
                                                 {identity.district}
                                             </Typography>
                                         </Box>
-
-                                        <Box mb={2}>
-                                            <Typography gutterBottom={true} variant="body2">
-                                                Phone
-                                            </Typography>
-                                            <Typography gutterBottom={true} variant="h6">
-                                                {payment.phone}
-                                            </Typography>
-                                        </Box>
                                     </Box>
                                 </CardContent>
                             </Card>
                         </Grid>
-
                     ) : (
                         <Grid item={true} xs={12} md={6}>
                             <Card elevation={1} variant="elevation">

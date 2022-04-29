@@ -4,14 +4,14 @@ import {
     Card,
     CardContent,
     Divider,
+    FormControl,
     Grid,
+    InputLabel,
+    MenuItem,
+    Select,
     Stack,
     TextField,
-    Typography,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Select
+    Typography
 } from "@mui/material";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
 import {REQUEST_ACTION_CREATORS} from "../../redux/request/request-action-creators";
@@ -36,7 +36,8 @@ const Payment = () => {
         setPayment({...payment, [event.target.name]: event.target.value});
     }
     const handleButtonClick = () => {
-        if (!moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())) {
+
+        if (!(certificate?.dateOfBirth && (moment(new Date(certificate?.dateOfBirth)).subtract(1, 'year').isBefore(moment())))) {
             if (!name) {
                 setError({error, name: 'Field required'});
                 return;
@@ -80,8 +81,7 @@ const Payment = () => {
             }
 
             dispatch(REQUEST_ACTION_CREATORS.savePayment({name, phone, transactionID, amount, provider}));
-        }
-        else {
+        } else {
             dispatch(REQUEST_ACTION_CREATORS.savePayment({
                 name: 'Free',
                 phone: 'Free',
@@ -102,8 +102,9 @@ const Payment = () => {
                     <Typography mb={2} gutterBottom={true} variant="body2" align="center">
                         This information should be about your payment
                     </Typography>
-                    {moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now()) && (
-                        <Typography fontWeight="bold" color="primary" mb={2} gutterBottom={true} variant="body2" align="center">
+                    {(certificate?.isUnderOneYear) && (
+                        <Typography fontWeight="bold" color="primary" mb={2} gutterBottom={true} variant="body2"
+                                    align="center">
                             Free for children under 1 year. Click next to proceed.
                         </Typography>
                     )}
@@ -120,9 +121,9 @@ const Payment = () => {
                                 helperText={error.name}
                                 variant="outlined"
                                 name="name"
-                                disabled={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())}
+                                disabled={(certificate?.isUnderOneYear)}
                                 onChange={handleChange}
-                                value={name}
+                                value={certificate?.isUnderOneYear ? 'Waived' : name}
                                 placeholder="Enter name"
                             />
                         </Box>
@@ -130,7 +131,7 @@ const Payment = () => {
                         <FormControl>
                             <InputLabel>Network Provider</InputLabel>
                             <Select
-                                disabled={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())}
+                                disabled={(certificate?.isUnderOneYear)}
                                 select={true}
                                 fullWidth={true}
                                 label="Provider"
@@ -140,16 +141,20 @@ const Payment = () => {
                                 variant="outlined"
                                 name="provider"
                                 onChange={event => setProvider(event.target.value)}
-                                value={provider}>
+                                value={certificate?.isUnderOneYear ? 'Waived' : provider}>
                                 <MenuItem value="Momo">MTN Momo</MenuItem>
                                 <MenuItem value="AirtelTigo">AirtelTigo</MenuItem>
                                 <MenuItem value="Vodafone Cash">Vodafone Cash</MenuItem>
+                                {certificate.isUnderOneYear ? (
+                                    <MenuItem value="Waived">Waived</MenuItem>
+                                ) : null}
+
                             </Select>
                         </FormControl>
 
                         <Box>
                             <TextField
-                                disabled={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())}
+                                disabled={certificate?.isUnderOneYear}
                                 fullWidth={true}
                                 label="Phone"
                                 required={true}
@@ -159,14 +164,14 @@ const Payment = () => {
                                 variant="outlined"
                                 name="phone"
                                 onChange={handleChange}
-                                value={phone}
+                                value={certificate?.isUnderOneYear ? 'Waived' : phone}
                                 placeholder="Enter phone number"
                             />
                         </Box>
 
                         <Box>
                             <TextField
-                                disabled={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())}
+                                disabled={(certificate?.isUnderOneYear)}
                                 fullWidth={true}
                                 label="Amount"
                                 required={true}
@@ -176,7 +181,7 @@ const Payment = () => {
                                 variant="outlined"
                                 name="amount"
                                 onChange={handleChange}
-                                value={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now()) ? 0 : 20}
+                                value={certificate?.isUnderOneYear ? 0 : 20}
                                 type="number"
                                 placeholder="Enter amount paid"
                             />
@@ -188,14 +193,14 @@ const Payment = () => {
                                 label="Transaction ID"
                                 required={true}
                                 size="medium"
-                                disabled={moment(certificate.dateOfBirth).subtract(1, 'year').isBefore(Date.now())}
+                                disabled={certificate?.isUnderOneYear}
                                 error={Boolean(error.transactionID)}
                                 helperText={error.transactionID}
                                 variant="outlined"
                                 name="transactionID"
                                 defaultValue=""
                                 onChange={handleChange}
-                                value={transactionID}
+                                value={certificate?.isUnderOneYear ? 'Waived' : transactionID}
                                 placeholder="Enter transaction id"
                             />
                         </Box>

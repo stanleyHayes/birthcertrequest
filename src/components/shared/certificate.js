@@ -2,10 +2,10 @@ import {
     Box,
     Button,
     Card,
-    CardContent,
+    CardContent, Checkbox,
     Container,
     Divider,
-    FormControl,
+    FormControl, FormControlLabel,
     Grid,
     InputLabel,
     MenuItem,
@@ -33,6 +33,7 @@ const Certificate = () => {
     const [motherLevelOfEducation, setMotherLevelOfEducation] = useState(c.motherLevelOfEducation);
     const [fatherLevelOfEducation, setFatherLevelOfEducation] = useState(c.fatherLevelOfEducation);
     const [idCardType, setIDCardType] = useState(c.idCardType);
+    const [isUnderOneYear, setIsUnderOneYear] = useState(c.isUnderOneYear);
 
     const [error, setError] = useState({});
 
@@ -56,6 +57,11 @@ const Certificate = () => {
         fullNameOfInformant,
         idCardNumber,
     } = certificate;
+
+    const handleMustPay = date => {
+        setCertificate({...certificate, 'dateOfBirth': date});
+    }
+
 
     const handleChange = event => {
         setCertificate({...certificate, [event.target.name]: event.target.value});
@@ -229,6 +235,7 @@ const Certificate = () => {
             idCardType,
             fatherOccupation,
             fatherNationality,
+            isUnderOneYear
         }));
         dispatch(REQUEST_ACTION_CREATORS.nextPage());
     }
@@ -340,19 +347,30 @@ const Certificate = () => {
                                             rawValue={dateOfBirth}
                                             label="Date of birth"
                                             value={dateOfBirth}
-                                            onChange={(date) => {
-                                                setCertificate({...certificate, 'dateOfBirth': date})
-                                            }}
+                                            onChange={handleMustPay}
                                             renderInput={
                                                 (params) =>
                                                     <TextField
+                                                        name="dateOfBirth"
                                                         variant="outlined"
                                                         fullWidth={true}
                                                         placeholder="Date of birth"
                                                         margin="normal"
-                                                        label="Start Date" {...params} />}
+                                                        label="Date of Birth" {...params} />}
                                             date={dateOfBirth}
                                         />
+                                    </Box>
+
+                                    <Box>
+                                        <FormControl>
+                                            <FormControlLabel
+                                                label="User under 1 year?"
+                                                control={
+                                                <Checkbox
+                                                    onChange={event => setIsUnderOneYear(event.target.checked)}
+                                                    checked={isUnderOneYear}
+                                                    readOnly={false} />} />
+                                        </FormControl>
                                     </Box>
                                 </Stack>
                             </CardContent>
@@ -446,7 +464,7 @@ const Certificate = () => {
                                             value={idCardType}>
                                             <MenuItem value="Ghana Card">Ghana Card</MenuItem>
                                             <MenuItem value="Passport">Passport</MenuItem>
-                                            </Select>
+                                        </Select>
                                     </FormControl>
                                     <TextField
                                         fullWidth={true}
